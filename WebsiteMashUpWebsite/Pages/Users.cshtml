@@ -1,0 +1,9 @@
+﻿@page
+@model UsersModel
+
+<h1>User List</h1>
+<ul>
+    @foreach (var user in Model.Users) {
+        <li>@user.Name (@user.Email)</li>
+    }
+</ul>

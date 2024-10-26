@@ -1,7 +1,20 @@
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using WebsiteModels.MongoModels;
+using WebsiteModels.MongoRepos;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<UserRepository>();
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDB"));
+
+builder.Services.AddSingleton<IMongoClient, MongoClient>(sp => {
+    var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    return new MongoClient(settings.ConnectionString);
+});
 
 var app = builder.Build();
 
